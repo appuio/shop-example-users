@@ -1,26 +1,24 @@
 defmodule DocsUsers.Router do
   use DocsUsers.Web, :router
 
-  pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_flash
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
-  end
-
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/", DocsUsers do
-    pipe_through :browser # Use the default browser stack
+  scope "/api/v1", DocsUsers.V1 do
+    # use the api pipeline
+    pipe_through :api
 
-    get "/", PageController, :index
+    # login via email/password, return a JWT
+    post "/users/login", UsersController, :login
+
+    # registration
+    post "/users", UsersController, :create
+
+    # get own user data
+    get "/users/:id", UsersController, :read
+
+    # edit own user data
+    put "/users/:id", UsersController, :update
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", DocsUsers do
-  #   pipe_through :api
-  # end
 end
