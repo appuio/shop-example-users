@@ -1,42 +1,29 @@
 # extend alpine
 FROM alpine:3.5
 
-# specify the elixir version
-ENV ELIXIR_VERSION 1.4.2
-ENV MIX_ENV "prod"
+# create new user with id 1001 and add to root group
+RUN adduser -S 1001 -G root && \
+  mkdir -p /app && \
+  chown 1001:root /app
 
-# install erlang and elixir
-RUN apk --update add --no-cache --virtual .build-deps wget ca-certificates && \
-    apk add --no-cache \
-      erlang \
-      erlang-crypto \
-      erlang-syntax-tools \
-      erlang-parsetools \
-      erlang-inets \
-      erlang-ssl \
-      erlang-public-key \
-      erlang-eunit \
-      erlang-asn1 \
-      erlang-sasl \
-      erlang-erl-interface \
-      erlang-dev && \
-    wget --no-check-certificate https://github.com/elixir-lang/elixir/releases/download/v${ELIXIR_VERSION}/Precompiled.zip && \
-    mkdir -p /opt/elixir-${ELIXIR_VERSION}/ && \
-    unzip Precompiled.zip -d /opt/elixir-${ELIXIR_VERSION}/ && \
-    rm Precompiled.zip && \
-    apk del .build-deps
+# expose port 4000
+EXPOSE 4000
 
-# add the elixir installation to path
-ENV PATH $PATH:/opt/elixir-${ELIXIR_VERSION}/bin
+# environment variables
+ENV VERSION 0.0.1
 
-# initialize hex and rebar
-RUN erl && \
-    mix local.hex --force && \
-    mix local.rebar --force
+# switch to user 1001 (non-root)
+USER 1001
 
-# add a new dir for the app
-RUN mkdir /app
+# copy the release into the runtime container
+COPY _build/prod/rel/docs_users/releases/${VERSION}/docs_users.tar.gz /app/docs_users.tar.gz
+
+# change to the application root
 WORKDIR /app
 
-# run shell as default command
-CMD ["/bin/sh"]
+# extract the release
+RUN tar xvzf docs_users.tar.gz
+
+# run the release in foreground mode
+# such that we get logs to stdout/stderr
+CMD ["/app/bin/docs_users", "foreground"]
