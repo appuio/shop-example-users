@@ -10,15 +10,15 @@ defmodule DocsUsers.Router do
     pipe_through :api
 
     # login via email/password, return a JWT
-    post "/users/login", UsersController, :login
+    post "/users/login", UserController, :login
 
     # registration
-    post "/users", UsersController, :create
+    post "/users", UserController, :create
 
     # get own user data
-    get "/users/:id", UsersController, :read
+    get "/users/:id", UserController, :read
 
     # edit own user data
-    put "/users/:id", UsersController, :update
+    put "/users/:id", UserController, :update
   end
 end
