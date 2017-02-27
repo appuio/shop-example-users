@@ -26,4 +26,4 @@ RUN tar xvzf docs_users.tar.gz
 
 # run the release in foreground mode
 # such that we get logs to stdout/stderr
-CMD ["/app/bin/dccs_users", "foreground"]
+CMD ["/app/bin/docs_users", "foreground"]
