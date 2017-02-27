@@ -16,8 +16,7 @@ ENV VERSION 0.0.1
 USER 1001
 
 # copy the release into the runtime container
-COPY _build/prod/rel/docs_users/releases/${VERSION}/docs_users.tar.gz
-  /app/docs_users.tar.gz
+COPY _build/prod/rel/docs_users/releases/${VERSION}/docs_users.tar.gz /app/docs_users.tar.gz
 
 # change to the application root
 WORKDIR /app
