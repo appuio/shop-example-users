@@ -14,8 +14,8 @@ config :docs_users, DocsUsers.Endpoint,
 # Configure your database
 config :docs_users, DocsUsers.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
+  username: "postgresql",
   password: "secret",
-  database: "postgres",
+  database: "postgresql",
   hostname: "users-db",
   pool_size: 20
