@@ -17,5 +17,5 @@ config :docs_users, DocsUsers.Repo,
   username: "postgres",
   password: "secret",
   database: "postgres",
-  hostname: "users_db",
+  hostname: "users-db",
   pool_size: 20
