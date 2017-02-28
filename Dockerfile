@@ -12,6 +12,10 @@ EXPOSE 4000
 # environment variables
 ENV VERSION 0.0.1
 
+# install ncurses-libs
+# it seems to be a runtime dependency
+RUN apk --update --no-cache add ncurses-libs
+
 # switch to user 1001 (non-root)
 USER 1001
 
