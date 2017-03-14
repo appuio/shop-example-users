@@ -1,6 +1,9 @@
 defmodule DocsUsers.V1.User do
   use DocsUsers.Web, :model
 
+  # we need to define that poison should encode everything except __meta__
+  # https://github.com/elixir-ecto/ecto/issues/840
+  @derive {Poison.Encoder, except: [:__meta__]}
   schema "users" do
     field :uuid, Ecto.UUID
     field :name, :string
@@ -18,5 +21,7 @@ defmodule DocsUsers.V1.User do
     struct
     |> cast(params, [:uuid, :name, :email, :password, :active])
     |> validate_required([:uuid, :name, :email, :password, :active])
+    |> validate_length(:name, max: 255)
+    |> validate_length(:email, max: 255)
   end
 end
