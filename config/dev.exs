@@ -38,5 +38,5 @@ config :docs_users, DocsUsers.Repo,
   username: "postgres",
   password: "secret",
   database: "postgres",
-  hostname: "172.28.128.3",
+  hostname: "localhost",
   pool_size: 10
