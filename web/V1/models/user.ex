@@ -20,6 +20,7 @@ defmodule DocsUsers.V1.User do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:uuid, :name, :email, :password, :active])
+    |> unique_constraint(:email)
     |> validate_required([:uuid, :name, :email, :password, :active])
     |> validate_length(:name, max: 255)
     |> validate_length(:email, max: 255)

@@ -53,15 +53,15 @@ defmodule DocsUsers.V1.UserController do
     # add the new user to the database
     case Repo.insert(changeset) do
       {:ok, user} ->
-        # extract the id from the newly created user
-        # TODO: can we optimize this? step necessary?
-        %{:uuid => uuid} = user
-
         # the user was successfully added
         # return a successful JSON response
         json conn, %{
           success: true,
-          uuid: uuid,
+          data: %{
+            id: user.id,
+            uuid: user.uuid,
+            token: "JWT"
+          },
           # TODO: remove debug output
           request: request
         }
