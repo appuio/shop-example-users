@@ -21,7 +21,6 @@ defmodule DocsUsers.V1.UserController do
     }
   end
 
-  # TODO: use when: is_email or similar
   def login(conn, %{"email" => email, "password" => password}) do
     # TODO: use guardian & guardian db?
 
