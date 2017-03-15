@@ -1,0 +1,17 @@
+stages:
+  - build
+  - deploy
+
+build:
+  image: appuio/shop-example-users-builder
+  script:
+    - ls
+
+deploy:
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker -v 
+  tags:
+    - dockerbuild

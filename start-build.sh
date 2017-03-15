@@ -1,3 +1,3 @@
 #!/bin/bash
-docker run -t --volume "/opt/git/services/users:/app" docs_users_build mix deps.get && mix release
+docker run -t --volume "/opt/git/services/users:/app" shop-example-users-builder mix deps.get && mix release
 
