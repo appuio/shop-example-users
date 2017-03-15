@@ -2,11 +2,25 @@ stages:
   - build
   - deploy
 
+variables:
+  MIX_DEPS: deps
+
 build:
   stage: build
   image: appuio/shop-example-users-builder
   script:
-    - ls
+    # install necessary application packages
+    - mix deps.get
+    # build the application sources
+    - mix release
+  cache:
+    key: $CI_PROJECT_ID
+    paths:
+      - $MIX_DEPS
+  artifacts:
+    expire_in: 5min
+    paths:
+      - _build
 
 deploy:
   stage: deploy
@@ -14,6 +28,7 @@ deploy:
   services:
     - docker:dind
   script:
+    - ls
     - docker -v 
   tags:
     - dockerbuild
