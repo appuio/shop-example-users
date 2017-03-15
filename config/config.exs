@@ -24,6 +24,7 @@ config :logger, :console,
 
 # Configures Guardian for authentication
 config :guardian, Guardian,
+  hooks: GuardianDb,
   allowed_algos: ["HS512"], # optional
   verify_module: Guardian.JWT,  # optional
   issuer: "docs_users",
@@ -31,7 +32,10 @@ config :guardian, Guardian,
   allowed_drift: 2000,
   verify_issuer: true, # optional
   secret_key: "l1jp*8SggVjlWpGI5QkFG3UUB&ob@lY@s4v^h83&Rv7YjI4yD8FqENTr^6ju40Cz",
-  serializer: DocsUsers.GuardianSerializer
+  serializer: DocsUsers.V1.GuardianSerializer
+
+config :guardian_db, GuardianDb,
+  repo: DocsUsers.Repo
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
