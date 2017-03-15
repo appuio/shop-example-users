@@ -5,6 +5,7 @@ defmodule DocsUsers.V1.UserController do
 
   # TODO: remove this debugging function
   def index(conn, _) do
+
     users = Repo.all(User) # fetch all the users from the db
       # |> Enum.filter(fn user -> user.active end) # access the atom with .active
       # |> Enum.map(fn user -> Map.drop(user, [:password, :id, :active]) end) # drop unwanted keys
@@ -14,10 +15,10 @@ defmodule DocsUsers.V1.UserController do
         fn user -> Map.drop(user, [:password, :id, :active]) end # map step
       )
       
-    json conn, %{
-      success: true,
-      data: users
-    }
+    conn
+    |> put_status(200)
+    |> put_data users
+
   end
 
   def login(conn, %{"email" => email, "password" => password}) do
@@ -29,29 +30,39 @@ defmodule DocsUsers.V1.UserController do
       # generate a JWT
       new_conn = Guardian.Plug.api_sign_in(conn, user)
       jwt = Guardian.Plug.current_token(new_conn)
-      {:ok, claims} = Guardian.Plug.claims(new_conn)
+      {:ok, claims} = Guardian.Plug.claims(new_conn) # TODO: catch failures?
       exp = Map.get(claims, "exp")
 
       # return a JSON response with UUID and JWT
-      return_data(conn, %{
-        id: user.id,
-        uuid: user.uuid,
-        token: jwt,
-        expiration: exp
-      })
+      new_conn
+      |> put_status(200)
+      |> put_resp_header("authorization", "Bearer #{jwt}")
+      |> put_resp_header("x-expires", to_string(exp))
+      |> put_data %{
+          name: user.name,
+          email: user.email,
+          token: jwt
+      }
 
     else
 
       # the user does exist but is inactive, return a failure message
-      %User{email: email, password: password, active: false} -> return_message(conn, "ACCOUNT_INACTIVE")
+      %User{email: email, password: password, active: false} ->
+        conn 
+        |> put_status(200)
+        |> put_message "ACCOUNT_INACTIVE"
         
       # the user doesn't exist, return a failure message
-      _ -> return_message(conn, "LOGIN_INVALID")
+      _ -> 
+        conn
+        |> put_status(200)
+        |> put_message "LOGIN_INVALID"
 
     end
 
   end
-
+  def login(conn, _), do: invalid conn
+  
   def register(conn, %{"name" => name, "email" => email, "password" => password}) do
 
     # generate a new user using the model
@@ -72,73 +83,86 @@ defmodule DocsUsers.V1.UserController do
       {:ok, user} ->
         # the user was successfully added
         # return a successful JSON response
-        return_data(conn, %{
-          id: user.id,
-          uuid: user.uuid
-        })
+        conn
+        |> put_status(201)
+        |> put_data %{
+          name: user.name,
+          email: user.email
+        }
 
       {:error, changeset} ->
         # the user could not be created
         # return a failure JSON response
-        return_error(conn, %{
+        conn
+        |> put_status(200)
+        |> put_error %{
           message: "INVALID_BODY",
           errors: changeset.errors
-        })
+        }
 
     end
 
   end
-  
-  def login(conn, _), do: invalid conn
-
   def register(conn, _), do: invalid conn
 
-  # TODO: implement using UUID
-  def read(conn, %{"uuid" => uuid}) do
-    user = Repo.get!(User, uuid)
+  def logout(conn, _) do
 
-    json conn, %{
-      success: true
-    }
-  end
+    # get the current token from the request header
+    jwt = Guardian.Plug.current_token(conn)
 
-  # TODO: implement using UUID
-  def update(conn, %{"uuid" => uuid, "user" => user_params}) do
-    user = Repo.get!(User, uuid)
-    changeset = User.changeset(user, user_params)
+    # try extracting claims from the header
+    # will only work if it is still valid
+    case Guardian.Plug.claims(conn) do
 
-    case Repo.update(changeset) do
-      {:ok, user} ->
-        json conn, %{
+      {:ok, claims} ->
+        # revoke the token when logging out
+        # this will also remove it from the db and make it unusable
+        Guardian.revoke!(jwt, claims)
+
+        conn
+        |> put_status(200)
+        |> json %{
           success: true
         }
-      {:error, changeset} ->
-        json conn, %{
-          success: false
-        }
+
+      {:error, _} ->
+
+        conn
+        |> put_status(401)
+        |> put_message "ALREADY_LOGGED_OUT"
+
     end
+
+  end
+
+  def read(conn, %{"uuid" => uuid}) do
+    # TODO: implement using UUID
+  end
+
+  def update(conn, %{"uuid" => uuid, "user" => user}) do
+    # TODO: implement using UUID
   end
 
   defp invalid(conn) do
-    return_message(conn, "INVALID_BODY")
+    put_message(conn, "INVALID_BODY")
   end
 
-  defp return_data(conn, data_map) do
+  defp put_data(conn, data_map) do
     json conn, %{
       success: true,
       data: data_map
     }
   end
 
-  defp return_error(conn, error_map) do
+  defp put_error(conn, error_map) do
     json conn, %{
       success: false,
       error: error_map
     }
   end
 
-  defp return_message(conn, message_string) do
-    return_error(conn, %{
+  defp put_message(conn, message_string) do
+    put_error(conn, %{
       message: message_string
     })
   end
