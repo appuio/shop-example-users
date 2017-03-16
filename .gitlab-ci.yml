@@ -3,6 +3,7 @@ stages:
   - deploy-staging
 
 variables:
+  CLUSTER_IP_STAGING: 172.30.145.111
   MIX_DEPS: deps
   OC_REGISTRY_URL: registry.appuio.ch
   OC_REGISTRY_IMAGE: $OC_REGISTRY_URL/$KUBE_NAMESPACE/users
@@ -18,6 +19,23 @@ variables:
 
 .oc: &oc
   image: appuio/gitlab-runner-oc:$OC_VERSION
+  script:
+    # login to the service account to get access to the internal registry
+    - oc login $KUBE_URL --token=$KUBE_TOKEN
+    - docker login -u serviceaccount -p `oc whoami -t` $OC_REGISTRY_URL
+    # build the docker image
+    # use the current latest image as a caching source
+    - docker pull $OC_REGISTRY_IMAGE:latest
+    - docker build --cache-from $OC_REGISTRY_IMAGE:latest -t $OC_REGISTRY_IMAGE:$DEPLOY_TAG .
+    # update the configuration in OpenShift
+    - sed -i 's;webserver-staging;webserver-'"$DEPLOY_ENV"';g' docker/openshift/*
+    - sed -i 's;webserver:latest;webserver:'"$DEPLOY_TAG"';g' docker/openshift/*
+    - sed -i 's;'$CLUSTER_IP_STAGING';'$CLUSTER_IP';g' docker/openshift/*
+    - oc replace -f docker/openshift -R
+    # push the image to the internal registry
+    - docker push $OC_REGISTRY_IMAGE:$DEPLOY_TAG
+    # trigger a deployment
+    - oc deploy users-$DEPLOY_ENV --latest --follow
 
 mirror:
   stage: build
@@ -61,20 +79,6 @@ build-staging:
   stage: deploy-staging
   services:
     - docker:dind
-  script:
-    # login to the service account to get access to the internal registry
-    - oc login $KUBE_URL --token=$KUBE_TOKEN
-    - docker login -u serviceaccount -p `oc whoami -t` $OC_REGISTRY_URL
-    # build the docker image
-    # use the current latest image as a caching source
-    - docker pull $OC_REGISTRY_IMAGE:latest
-    - docker build --cache-from $OC_REGISTRY_IMAGE:latest -t $OC_REGISTRY_IMAGE:$DEPLOY_TAG .
-    # update the configuration in OpenShift
-    - oc replace -f docker/openshift -R
-    # push the image to the internal registry
-    - docker push $OC_REGISTRY_IMAGE:$DEPLOY_TAG
-    # trigger a deployment
-    - oc deploy users-$DEPLOY_ENV --latest --follow
   only:
     - master
   except:
@@ -82,5 +86,6 @@ build-staging:
   tags:
     - dockerbuild
   variables:
+    CLUSTER_IP: $CLUSTER_IP_STAGING
     DEPLOY_ENV: staging
     DEPLOY_TAG: latest
