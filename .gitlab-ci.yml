@@ -4,31 +4,62 @@ stages:
 
 variables:
   MIX_DEPS: deps
+  OC_REGISTRY_URL: registry.appuio.ch
+  OC_REGISTRY_IMAGE: $OC_REGISTRY_URL/$KUBE_NAMESPACE/users
+  OC_VERSION: 1.3.3
+
+.builder: &builder
+  stage: build
+  image: appuio/shop-example-users-builder:latest
+  cache:
+    key: $CI_PROJECT_ID
+    paths:
+      - $MIX_DEPS
+
+.oc: &oc
+  image: appuio/gitlab-runner-oc:$OC_VERSION
+
+test:
+  <<: *builder
+  script:
+    # install necessary application packages
+    - mix deps.get
+    # run tests
+    - mix test
+  allow_failure: true
 
 build:
-  stage: build
-  image: appuio/shop-example-users-builder
+  <<: *builder
   script:
     # install necessary application packages
     - mix deps.get
     # build the application sources
     - MIX_ENV=prod mix release
-  cache:
-    key: $CI_PROJECT_ID
-    paths:
-      - $MIX_DEPS
   artifacts:
     expire_in: 5min
     paths:
       - _build
 
 deploy:
+  <<: *oc
   stage: deploy
-  image: docker:latest
+  environment: staging
   services:
     - docker:dind
   script:
-    - ls
-    - docker -v 
+    # login to the service account to get access to the internal registry
+    - oc login $KUBE_URL --token=$KUBE_TOKEN
+    - docker login -u serviceaccount -p `oc whoami -t` $OC_REGISTRY_URL
+    # build the docker image
+    # use the current latest image as a caching source
+    # - docker pull $OC_REGISTRY_IMAGE:latest
+    - docker build --cache-from $OC_REGISTRY_IMAGE:latest -t $OC_REGISTRY_IMAGE:$DEPLOY_TAG .
+    # push the image to the internal registry
+    - docker push $OC_REGISTRY_IMAGE:$DEPLOY_TAG
+    # trigger a deployment
+    - oc deploy users --latest --follow
   tags:
     - dockerbuild
+  variables:
+    DEPLOY_ENV: staging
+    DEPLOY_TAG: latest
