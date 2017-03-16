@@ -74,7 +74,7 @@ build-staging:
     # push the image to the internal registry
     - docker push $OC_REGISTRY_IMAGE:$DEPLOY_TAG
     # trigger a deployment
-    - oc deploy users --latest --follow
+    - oc deploy users-$DEPLOY_ENV --latest --follow
   only:
     - master
   except:
