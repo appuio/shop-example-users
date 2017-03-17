@@ -14,7 +14,7 @@ ENV VERSION 0.0.1
 
 # install ncurses-libs
 # it seems to be a runtime dependency
-RUN apk --update --no-cache add ncurses-libs
+RUN apk --update --no-cache add ncurses-libs curl ping
 
 # copy the release into the runtime container
 COPY _build/prod/rel/docs_users/releases/${VERSION}/docs_users.tar.gz /app/docs_users.tar.gz
