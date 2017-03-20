@@ -1,35 +1,34 @@
-# extend alpine
-FROM alpine:3.5
+# extend centos
+FROM centos:7
+
+# workaround for missing locale
+ENV LC_ALL en_US.UTF-8
 
 # create new user with id 1001 and add to root group
-RUN adduser -S 1001 -G root && \
-  mkdir -p /app && \
-  chown -R 1001:root /app
+# install ncurses as a runtime dependency
+RUN useradd -r -u 1001 -g 0 default && \
+    mkdir -p /app && \
+    chown -R 1001:0 /app
 
 # expose port 4000
 EXPOSE 4000
 
-# environment variables
-ENV VERSION 0.0.1
+# change to the application root
+WORKDIR /app
 
-# install ncurses-libs
-# it seems to be a runtime dependency
-RUN apk --update --no-cache add ncurses-libs
+# switch to user 1001 (non-root)
+USER 1001
+
+# specify the current version of the application
+ENV VERSION 0.0.1
 
 # copy the release into the runtime container
 COPY _build/prod/rel/docs_users/releases/${VERSION}/docs_users.tar.gz /app/docs_users.tar.gz
 
-# change to the application root
-WORKDIR /app
-
 # extract the release
-RUN tar xvzf docs_users.tar.gz && \ 
-  rm -rf docs_users.tar.gz && \
-  chown -R 1001:root /app && \
-  chmod -R g+w /app
-
-# switch to user 1001 (non-root)
-USER 1001
+RUN set -x && \
+    tar xvzf docs_users.tar.gz && \ 
+    rm -rf docs_users.tar.gz
 
 # run the release in foreground mode
 # such that we get logs to stdout/stderr
