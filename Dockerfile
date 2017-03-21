@@ -7,8 +7,7 @@ ENV LC_ALL en_US.UTF-8
 # create new user with id 1001 and add to root group
 RUN useradd -r -u 1001 -g 0 default && \
     mkdir -p /app && \
-    chown -R 1001:0 /app && \
-    chmod -R g+w /app
+    chown -R 1001:0 /app
 
 # expose port 4000
 EXPOSE 4000
@@ -28,7 +27,8 @@ COPY _build/prod/rel/docs_users/releases/${VERSION}/docs_users.tar.gz /app/docs_
 # extract the release
 RUN set -x && \
     tar xvzf docs_users.tar.gz && \ 
-    rm -rf docs_users.tar.gz
+    rm -rf docs_users.tar.gz &&
+    chmod -R g+w /app
 
 # run the release in foreground mode
 # such that we get logs to stdout/stderr
