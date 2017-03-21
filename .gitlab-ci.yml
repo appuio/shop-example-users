@@ -50,6 +50,7 @@ mirror:
 test:
   <<: *builder
   script:
+    - mix clean
     # install necessary application packages
     - mix deps.get
     # compile the application
