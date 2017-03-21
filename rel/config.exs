@@ -31,6 +31,7 @@ environment :prod do
   set include_erts: true
   set include_src: false
   set cookie: :"g!37eQsNj*[j}@]EkqUAk{H>>=h$:`1|NTcD_Y;A&31PUAjGF~T8A`By/){;[{fO"
+  set pre_start_hook: "rel/commands/migrate.sh"
 end
 
 # You may define one or more releases in this file.
@@ -40,5 +41,8 @@ end
 
 release :docs_users do
   set version: current_version(:docs_users)
+  set commands: [
+    "migrate": "rel/commands/migrate.sh"
+  ]
 end
 
