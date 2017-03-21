@@ -20,7 +20,7 @@ defmodule DocsUsers.ReleaseTasks do
 
     # Start the Repo(s)
     IO.puts "Starting repos.."
-    DocsUsers.Repo.start_link(pool_size: 1)))
+    DocsUsers.Repo.start_link(pool_size: 1)
 
     # Run migrations
     run_migrations_for(:docs_users)
