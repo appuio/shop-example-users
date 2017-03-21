@@ -5,10 +5,6 @@ defmodule DocsUsers.ReleaseTasks do
     :ecto
   ]
 
-  @repos [
-    DocsUsers.Repo
-  ]
-
   def seed do
     IO.puts "Loading DocsUsers.."
     # Load the code for users, but don't start it
@@ -27,7 +23,7 @@ defmodule DocsUsers.ReleaseTasks do
 
     # Signal shutdown
     IO.puts "Success!"
-    :init.stop()
+    # :init.stop()
   end
 
   def priv_dir(app), do: "#{:code.priv_dir(app)}"
