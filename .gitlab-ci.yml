@@ -62,7 +62,7 @@ test:
 compile:
   <<: *builder
   script:
-    - mix clean
+    - rm -rf deps # TODO: clearing cache..
     # install necessary application packages
     - mix deps.get
     # build the application sources
