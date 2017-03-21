@@ -1,5 +1,5 @@
 # extend centos
-FROM centos:7
+FROM centos:7.3.1611
 
 # workaround for missing locale
 ENV LC_ALL en_US.UTF-8
