@@ -27,7 +27,7 @@ COPY _build/prod/rel/docs_users/releases/${VERSION}/docs_users.tar.gz /app/docs_
 # extract the release
 RUN set -x && \
     tar xvzf docs_users.tar.gz && \ 
-    rm -rf docs_users.tar.gz &&
+    rm -rf docs_users.tar.gz && \
     chmod -R g+w /app
 
 # run the release in foreground mode
