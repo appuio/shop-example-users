@@ -5,7 +5,6 @@ FROM centos:7.3.1611
 ENV LC_ALL en_US.UTF-8
 
 # create new user with id 1001 and add to root group
-# install ncurses as a runtime dependency
 RUN useradd -r -u 1001 -g 0 default && \
     mkdir -p /app && \
     chown -R 1001:0 /app && \
