@@ -12,10 +12,6 @@ variables:
 .builder: &builder
   stage: build
   image: appuio/shop-example-users-builder:latest
-  cache:
-    key: $CI_PROJECT_ID
-    paths:
-      - $MIX_DEPS
 
 .oc: &oc
   image: appuio/gitlab-runner-oc:$OC_VERSION
@@ -52,6 +48,7 @@ test:
   script:
     # - rm -rf deps # clearing cache..
     # install necessary application packages
+    - mix clean --deps
     - mix deps.get
     # compile the application
     - MIX_ENV=prod mix compile
@@ -64,6 +61,7 @@ compile:
   script:
     # - rm -rf deps # clearing cache..
     # install necessary application packages
+    - mix clean --deps
     - mix deps.get
     # build the application sources
     - MIX_ENV=prod mix release
