@@ -1,3 +1,3 @@
 #!/bin/sh
 
-bin/myapp command Elixir.DocsUsers.ReleaseTasks seed
+bin/docs_users command Elixir.DocsUsers.ReleaseTasks seed
