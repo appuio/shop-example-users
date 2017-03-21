@@ -50,7 +50,7 @@ mirror:
 test:
   <<: *builder
   script:
-    - mix clean
+    - rm -rf deps # TODO: clearing cache..
     # install necessary application packages
     - mix deps.get
     # compile the application
