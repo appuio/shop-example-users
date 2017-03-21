@@ -23,7 +23,7 @@ defmodule DocsUsers.ReleaseTasks do
 
     # Signal shutdown
     IO.puts "Success!"
-    # :init.stop()
+    :init.stop()
   end
 
   def priv_dir(app), do: "#{:code.priv_dir(app)}"

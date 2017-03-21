@@ -31,7 +31,7 @@ environment :prod do
   set include_erts: true
   set include_src: false
   set cookie: :"g!37eQsNj*[j}@]EkqUAk{H>>=h$:`1|NTcD_Y;A&31PUAjGF~T8A`By/){;[{fO"
-  set pre_start_hook: "rel/commands/migrate.sh"
+  # set pre_start_hook: "rel/commands/migrate.sh"
 end
 
 # You may define one or more releases in this file.
