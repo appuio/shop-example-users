@@ -8,7 +8,8 @@ ENV LC_ALL en_US.UTF-8
 # install ncurses as a runtime dependency
 RUN useradd -r -u 1001 -g 0 default && \
     mkdir -p /app && \
-    chown -R 1001:0 /app
+    chown -R 1001:0 /app && \
+    chmod -R g+w /app
 
 # expose port 4000
 EXPOSE 4000
