@@ -40,5 +40,8 @@ end
 
 release :docs_users do
   set version: current_version(:docs_users)
+  set commands: [
+    "migrate": "rel/commands/migrate.sh"
+  ]
 end
 

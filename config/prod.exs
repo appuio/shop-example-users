@@ -13,11 +13,18 @@ use Mix.Config
 # which you typically run after static files are built.
 config :docs_users, DocsUsers.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/manifest.json"
+  url: [host: "example.com", port: 80] #,
+  # cache_static_manifest: "priv/static/manifest.json"
 
 # Do not print debug messages in production
-config :logger, level: :info
+# config :logger, level: :info
+
+# Do not include metadata nor timestamps in development logs
+config :logger, :console, format: "[$level] $message\n"
+
+# Set a higher stacktrace during development. Avoid configuring such
+# in production as building large stacktraces may be expensive.
+config :phoenix, :stacktrace_depth, 20
 
 # ## SSL Support
 #

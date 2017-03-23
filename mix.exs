@@ -18,7 +18,7 @@ defmodule DocsUsers.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {DocsUsers, []},
-     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
+     applications: [:elixir_make, :phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
                     :phoenix_ecto, :postgrex, :comeonin, :guardian, :guardian_db]]
   end
 
