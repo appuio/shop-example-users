@@ -10,26 +10,26 @@ RUN adduser -S 1001 -G root && \
 EXPOSE 4000
 
 # environment variables
+ENV HOME /app
 ENV VERSION 0.0.1
 
 # install ncurses-libs
 # it seems to be a runtime dependency
 RUN apk --update --no-cache add ncurses-libs
 
-# copy the release into the runtime container
-COPY _build/prod/rel/docs_users/releases/${VERSION}/docs_users.tar.gz /app/docs_users.tar.gz
-
 # change to the application root
 WORKDIR /app
+
+# switch to user 1001 (non-root)
+USER 1001
+
+# copy the release into the runtime container
+COPY _build/prod/rel/docs_users/releases/${VERSION}/docs_users.tar.gz /app/docs_users.tar.gz
 
 # extract the release
 RUN tar xvzf docs_users.tar.gz && \ 
   rm -rf docs_users.tar.gz && \
-  chown -R 1001:root /app && \
   chmod -R g+w /app
-
-# switch to user 1001 (non-root)
-USER 1001
 
 # run the release in foreground mode
 # such that we get logs to stdout/stderr
