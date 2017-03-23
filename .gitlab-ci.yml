@@ -50,6 +50,7 @@ mirror:
 test:
   <<: *builder
   script:
+    - rm -rf deps
     # install necessary application packages
     - mix deps.get
     # compile the application
@@ -61,6 +62,7 @@ test:
 compile:
   <<: *builder
   script:
+    - rm -rf deps
     # install necessary application packages
     - mix deps.get
     # build the application sources
