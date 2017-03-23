@@ -3,7 +3,7 @@ FROM alpine:3.5
 
 # create new user with id 1001 and add to root group
 RUN adduser -S 1001 -G root && \
-  mkdir -p /app && \
+  mkdir -p /app/var && \
   chown -R 1001:root /app
 
 # expose port 4000

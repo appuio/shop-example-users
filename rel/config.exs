@@ -45,4 +45,3 @@ release :docs_users do
     "migrate": "rel/commands/migrate.sh"
   ]
 end
-
