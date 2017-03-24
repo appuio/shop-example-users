@@ -1,2 +1,3 @@
 *
 !_build/prod/rel/docs_users/releases
+!wait-for-postgres.sh
