@@ -21,4 +21,4 @@ done
 
 # as soon as postgres is up, execute the application with given params
 >&2 echo "Postgres is up - executing command"
-exec /app/bin/docs_users "$@"
+exec "$@"

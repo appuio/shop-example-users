@@ -14,8 +14,8 @@ config :docs_users, DocsUsers.Endpoint,
 # Configure your database
 config :docs_users, DocsUsers.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "users", #System.get_env("DB_USERNAME"),
-  password: "secret", #System.get_env("DB_PASSWORD"),
-  database: "users", # System.get_env("DB_DATABASE"),
-  hostname: "users-staging-db", # System.get_env("DB_HOSTNAME"),
+  username: System.get_env("DB_USERNAME"),
+  password: System.get_env("DB_PASSWORD"),
+  database: System.get_env("DB_DATABASE"),
+  hostname: System.get_env("DB_HOSTNAME"),
   pool_size: 20

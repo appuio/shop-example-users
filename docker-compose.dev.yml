@@ -1,0 +1,20 @@
+version: "2.1"
+services:
+  users:
+    build: ../users-builder
+    command: /bin/sh -c "mix ecto.migrate;mix phoenix.server"
+    environment:
+      DB_USERNAME: users
+      DB_PASSWORD: secret
+      DB_DATABASE: users
+      DB_HOSTNAME: users-db
+      MIX_ENV: dev
+    ports:
+      - "4000:4000"
+    volumes:
+      - /opt/git/services/users:/app
+
+  users-db:
+    extends:
+      file: docker-compose.yml
+      service: users-db

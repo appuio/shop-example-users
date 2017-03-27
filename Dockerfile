@@ -41,4 +41,4 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 # run the release in foreground mode
 # such that we get logs to stdout/stderr
-CMD ["foreground"]
+CMD ["/app/bin/docs_users", "foreground"]
