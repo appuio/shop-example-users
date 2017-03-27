@@ -25,13 +25,15 @@ USER 1001
 
 # copy the release into the runtime container
 COPY _build/prod/rel/docs_users/releases/${VERSION}/docs_users.tar.gz /app/docs_users.tar.gz
-COPY wait-for-postgres.sh /app/wait-for-postgres.sh
 
 # extract the release
-RUN tar xvzf docs_users.tar.gz && \ 
+RUN tar xvzf docs_users.tar.gz && \
   rm -rf docs_users.tar.gz && \
   chmod -R g+w /app
 
+# inject the start script
+COPY wait-for-postgres.sh /wait-for-postgres.sh
+
 # run the release in foreground mode
 # such that we get logs to stdout/stderr
-CMD ["/app/wait-for-postgres.sh", "users-db", "/app/bin/docs_users", "foreground"]
+CMD ["/wait-for-postgres.sh", "users-db", "/app/bin/docs_users", "foreground"]
