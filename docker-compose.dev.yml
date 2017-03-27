@@ -12,7 +12,7 @@ services:
     ports:
       - "4000:4000"
     volumes:
-      - /opt/git/services/users:/app
+      - /opt/git/services/users:/app/source
 
   users-db:
     extends:
