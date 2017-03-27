@@ -1,0 +1,21 @@
+version: "3"
+services:
+  users:
+    build: .
+    depends_on:
+      - users-db
+    environment:
+      DB_HOSTNAME: users-db
+      DB_USERNAME: users
+      DB_PASSWORD: secret
+      DB_DATABASE: users
+    links:
+      - users-db:users-staging-db
+    ports:
+      - "4000:4000"
+
+  users-db:
+    image: postgres:9.5-alpine
+    environment:
+      POSTGRES_USER: users
+      POSTGRES_PASSWORD: secret

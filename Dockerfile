@@ -31,9 +31,14 @@ RUN tar xvzf docs_users.tar.gz && \
   rm -rf docs_users.tar.gz && \
   chmod -R g+w /app
 
-# inject the start script
-COPY wait-for-postgres.sh /wait-for-postgres.sh
+# inject the entrypoint
+COPY entrypoint.sh /entrypoint.sh
+
+# define the custom entrypoint
+# this will wait for postgres to be up
+# and execute /app/docs_users $@ subsequently
+ENTRYPOINT ["/entrypoint.sh"]
 
 # run the release in foreground mode
 # such that we get logs to stdout/stderr
-CMD ["/wait-for-postgres.sh", "users-db", "/app/bin/docs_users", "foreground"]
+CMD ["foreground"]
