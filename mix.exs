@@ -41,7 +41,8 @@ defmodule DocsUsers.Mixfile do
      {:distillery, "~> 1.0"},
      {:comeonin, "~> 3.0"},
      {:guardian, "~> 0.14"},
-     {:guardian_db, "~> 0.8"}]
+     {:guardian_db, "~> 0.8"},
+     {:cors_plug, "~> 1.2"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

@@ -20,6 +20,9 @@ defmodule DocsUsers.Endpoint do
   plug Plug.RequestId
   plug Plug.Logger
 
+  # allow CORS from all origins
+  plug CORSPlug, origin: ["*"]
+
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],

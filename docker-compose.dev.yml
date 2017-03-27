@@ -2,7 +2,7 @@ version: "2.1"
 services:
   users:
     build: ../users-builder
-    command: /bin/sh -c "mix ecto.migrate;mix phoenix.server"
+    command: /bin/sh -c "mix deps.get;mix ecto.migrate;mix phoenix.server"
     environment:
       DB_USERNAME: users
       DB_PASSWORD: secret
