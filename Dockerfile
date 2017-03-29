@@ -15,7 +15,10 @@ ENV VERSION 0.0.1
 
 # install ncurses-libs
 # it seems to be a runtime dependency
-RUN apk --update --no-cache add ncurses-libs postgresql-client
+RUN set -x && \
+  apk --update --no-cache add \
+    ncurses-libs \
+    postgresql-client
 
 # change to the application root
 WORKDIR /app

@@ -9,6 +9,7 @@ services:
       DB_DATABASE: users
       DB_HOSTNAME: users-db
       MIX_ENV: dev
+      SECRET_KEY: "l1jp*8SggVjlWpGI5QkFG3UUB&ob@lY@s4v^h83&Rv7YjI4yD8FqENTr^6ju40Cz"
     ports:
       - "4000:4000"
     volumes:

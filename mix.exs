@@ -19,7 +19,7 @@ defmodule DocsUsers.Mixfile do
   def application do
     [mod: {DocsUsers, []},
      applications: [:elixir_make, :phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :comeonin, :guardian, :guardian_db]]
+                    :phoenix_ecto, :postgrex, :comeonin, :guardian, :guardian_db, :cors_plug, :conform]]
   end
 
   # Specifies which paths to compile per environment.
@@ -38,11 +38,12 @@ defmodule DocsUsers.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
-     {:distillery, "~> 1.0"},
+     {:distillery, "~> 1.3"},
      {:comeonin, "~> 3.0"},
      {:guardian, "~> 0.14"},
      {:guardian_db, "~> 0.8"},
-     {:cors_plug, "~> 1.2"}]
+     {:cors_plug, "~> 1.2"},
+     {:conform, "~> 2.3"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

@@ -44,4 +44,6 @@ release :docs_users do
   set commands: [
     "migrate": "rel/commands/migrate.sh"
   ]
+
+  plugin Conform.ReleasePlugin
 end
