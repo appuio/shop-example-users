@@ -12,7 +12,7 @@ config :docs_users,
 # Configures the endpoint
 config :docs_users, DocsUsers.Endpoint,
   url: [host: "localhost"],
-  # secret_key_base: "unz4/TtUrgBerGdtGWgQMmv4tKPzrSd/agahUaHsWTMEP48ZiTx0PNuq4m+Xftmu",
+  secret_key_base: "<REPLACE_THIS>",
   render_errors: [view: DocsUsers.ErrorView, accepts: ~w(html json)],
   pubsub: [name: DocsUsers.PubSub,
            adapter: Phoenix.PubSub.PG2]
@@ -31,7 +31,7 @@ config :guardian, Guardian,
   ttl: { 14, :days },
   allowed_drift: 2000,
   verify_issuer: true, # optional
-  # secret_key: "l1jp*8SggVjlWpGI5QkFG3UUB&ob@lY@s4v^h83&Rv7YjI4yD8FqENTr^6ju40Cz",
+  secret_key: "<REPLACE_THIS>",
   serializer: DocsUsers.V1.GuardianSerializer
 
 config :guardian_db, GuardianDb,

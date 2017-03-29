@@ -3,36 +3,18 @@ defmodule DocsUsers.V1.UserController do
 
   alias DocsUsers.V1.User
 
-  # TODO: remove this debugging function
-  def index(conn, _) do
-
-    users = Repo.all(User) # fetch all the users from the db
-      # |> Enum.filter(fn user -> user.active end) # access the atom with .active
-      # |> Enum.map(fn user -> Map.drop(user, [:password, :id, :active]) end) # drop unwanted keys
-      # |> Enum.filter_map(&(&1.active), &(Map.drop(&1, [:password, :id, :active])))
-      |> Enum.filter_map(
-        fn user -> user.active end, # filter step
-        fn user -> Map.drop(user, [:password, :id, :active]) end # map step
-      )
-      
-    conn
-    |> put_status(200)
-    |> put_data users
-
-  end
-
   def login(conn, %{"email" => email, "password" => password}) do
 
     # check if the given user exists and whether passwords match
     with user = %User{id: _, uuid: _, email: _, password: _, active: true} <- Repo.get_by(User, email: email), 
          true <- Comeonin.Bcrypt.checkpw(password, user.password) do
-
+      
       # generate a JWT
       new_conn = Guardian.Plug.api_sign_in(conn, user)
       jwt = Guardian.Plug.current_token(new_conn)
       {:ok, claims} = Guardian.Plug.claims(new_conn) # TODO: catch failures?
       exp = Map.get(claims, "exp")
-
+      
       # return a JSON response with UUID and JWT
       new_conn
       |> put_status(200)
@@ -48,12 +30,22 @@ defmodule DocsUsers.V1.UserController do
 
       # the user does exist but is inactive, return a failure message
       %User{email: email, password: password, active: false} ->
+
+        # call dummy_checkpw to slow down attacks
+        # one should not be able to easily guess valid usernames
+        Comeonin.Bcrypt.dummy_checkpw
+
         conn 
         |> put_status(200)
         |> put_message "ACCOUNT_INACTIVE"
         
       # the user doesn't exist, return a failure message
       _ -> 
+
+        # call dummy_checkpw to slow down attacks
+        # one should not be able to easily guess valid usernames
+        Comeonin.Bcrypt.dummy_checkpw
+
         conn
         |> put_status(200)
         |> put_message "LOGIN_INVALID"
@@ -133,14 +125,6 @@ defmodule DocsUsers.V1.UserController do
 
     end
 
-  end
-
-  def read(conn, %{"uuid" => uuid}) do
-    # TODO: implement using UUID
-  end
-
-  def update(conn, %{"uuid" => uuid, "user" => user}) do
-    # TODO: implement using UUID
   end
 
   defp invalid(conn) do
