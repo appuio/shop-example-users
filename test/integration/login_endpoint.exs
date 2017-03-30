@@ -68,13 +68,11 @@ defmodule LoginEndpoint do
     conn = post build_conn(), "/api/v1/users/login", %{email: "tester@gmail.com", password: "abcd"}
 
     # make sure that the login was successful
-    assert json_response(conn, 200) == %{
-      "success" => true,
-      "data" => %{
-        "name" => "Tester",
-        "email" => "tester@gmail.com",
-        "token" => "abcd" # there has to be some way to verify the token here
-      }
-    }
+    response = json_response(conn, 200)
+    assert response["success"]
+    assert response["data"]
+    assert response["data"]["name"] == "Tester"
+    assert response["data"]["email"]  == "tester@gmail.com"
+    assert {:ok, _} = Guardian.decode_and_verify(response["data"]["token"])
   end
 end

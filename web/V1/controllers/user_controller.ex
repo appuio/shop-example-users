@@ -89,7 +89,7 @@ defmodule DocsUsers.V1.UserController do
         |> put_status(200)
         |> put_error %{
           message: "INVALID_BODY",
-          errors: changeset.errors
+          # errors: changeset.errors
         }
 
     end
