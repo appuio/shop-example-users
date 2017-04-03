@@ -37,6 +37,9 @@ RUN tar xvzf docs_users.tar.gz && \
 # inject the entrypoint
 COPY entrypoint.sh /entrypoint.sh
 
+# make the entrypoint world executable
+RUN chmod +x /entrypoint.sh
+
 # define the custom entrypoint
 # this will wait for postgres to be up
 # and execute /app/docs_users $@ subsequently
