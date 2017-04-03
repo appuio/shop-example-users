@@ -26,11 +26,11 @@ WORKDIR /app
 # switch to user 1001 (non-root)
 USER 1001
 
-# inject the entrypoint
-COPY entrypoint.sh /app/entrypoint.sh
-
 # copy the release into the runtime container
 COPY _build/prod/rel/docs_users/releases/${VERSION}/docs_users.tar.gz /app/docs_users.tar.gz
+
+# inject the entrypoint
+COPY entrypoint.sh /app/entrypoint.sh
 
 # extract the release
 RUN tar xvzf docs_users.tar.gz && \
