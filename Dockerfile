@@ -3,8 +3,7 @@ FROM alpine:3.5
 
 # create new user with id 1001 and add to root group
 RUN adduser -S 1001 -G root && \
-  mkdir -p /app/var && \
-  chown -R 1001:root /app
+  mkdir -p /app/var
 
 # expose port 4000
 EXPOSE 4000
@@ -26,15 +25,15 @@ WORKDIR /app
 # inject the entrypoint
 COPY entrypoint.sh /app/entrypoint.sh
 
+# copy the release into the runtime container
+COPY _build/prod/rel/docs_users/releases/${VERSION}/docs_users.tar.gz /app/docs_users.tar.gz
+
 # make the entrypoint group executable
-RUN chown 1001:0 /app/entrypoint.sh && \
+RUN chown -R 1001:root /app && \
   chmod g+x /app/entrypoint.sh
   
 # switch to user 1001 (non-root)
 USER 1001
-
-# copy the release into the runtime container
-COPY _build/prod/rel/docs_users/releases/${VERSION}/docs_users.tar.gz /app/docs_users.tar.gz
 
 # extract the release
 RUN tar xvzf docs_users.tar.gz && \
