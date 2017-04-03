@@ -36,7 +36,7 @@ COPY _build/prod/rel/docs_users/releases/${VERSION}/docs_users.tar.gz /app/docs_
 RUN tar xvzf docs_users.tar.gz && \
   rm -rf docs_users.tar.gz && \
   chmod -R g+w /app && \
-  chmod g+x /entrypoint.sh
+  chmod g+x /app/entrypoint.sh
 
 # define the custom entrypoint
 # this will wait for postgres to be up
