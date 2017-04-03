@@ -23,14 +23,15 @@ RUN set -x && \
 # change to the application root
 WORKDIR /app
 
-# switch to user 1001 (non-root)
-USER 1001
-
 # inject the entrypoint
 COPY entrypoint.sh /app/entrypoint.sh
 
 # make the entrypoint group executable
-RUN chmod g+x /app/entrypoint.sh
+RUN chown 1001:0 /app/entrypoint.sh && \
+  chmod g+x /app/entrypoint.sh
+  
+# switch to user 1001 (non-root)
+USER 1001
 
 # copy the release into the runtime container
 COPY _build/prod/rel/docs_users/releases/${VERSION}/docs_users.tar.gz /app/docs_users.tar.gz
@@ -43,7 +44,7 @@ RUN tar xvzf docs_users.tar.gz && \
 # define the custom entrypoint
 # this will wait for postgres to be up
 # and execute /app/docs_users $@ subsequently
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
 
 # run the release in foreground mode
 # such that we get logs to stdout/stderr
