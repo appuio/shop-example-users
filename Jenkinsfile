@@ -8,12 +8,13 @@ pipeline {
       }
       steps {
         echo 'Running tests...'
+        pwd
         // install necessary application packages
-        bash 'mix deps.get' 
+        // sh 'mix deps.get' 
         // compile the application
-        bash 'MIX_ENV=prod mix compile'
+        // sh 'MIX_ENV=prod mix compile'
         // run tests
-        bash 'mix test'
+        // sh 'mix test'
       }
     }
 
@@ -23,19 +24,21 @@ pipeline {
       }
       steps {
         echo 'Creating release...'
+        pwd
         // install necessary application packages
-        bash 'mix deps.get'
+        // sh 'mix deps.get'
         // build the application sources
-        bash 'MIX_ENV=prod mix release'
+        // sh 'MIX_ENV=prod mix release'
         stash includes: '_build', name: 'release'
       }
     }
 
     stage('build') {
+      agent any
       steps {
         echo 'Building a container...'
         unstash 'release'
-        bash 'ls -la'
+        pwd
       }
     } 
   }
