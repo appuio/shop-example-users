@@ -4,17 +4,23 @@ pipeline {
   stages {
 
     stage('test') {
-      echo "testing..."
+      steps {
+        echo "testing..."
         sh "ls -la"
         sh "pwd"
+      }
     }
 
     stage('compile') {
-      echo "compiling..."
+      steps {
+        echo "compiling..."
+      }
     }
 
     stage('build') {
-      echo "building..."
+      steps {
+        echo "building..."
+      }
     }
     
   }
