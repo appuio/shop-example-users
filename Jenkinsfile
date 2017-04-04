@@ -6,8 +6,8 @@ pipeline {
     stage('test') {
       steps {
         echo "testing..."
-        sh "ls -la"
-        sh "pwd"
+        sh "ls -la || true"
+        sh "pwd || true"
       }
     }
 
