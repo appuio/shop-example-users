@@ -1,10 +1,14 @@
 pipeline {
-  agent none
+  agent {
+    // add a label such that the same node and workspace
+    // is used for the entire pipeline
+    label 'whatever'
+  }
   
   stages {
     stage('test') {
       agent {
-        docker:'appuio/shop-example-users-builder'
+        docker 'appuio/shop-example-users-builder'
       }
       steps {
         echo 'Running tests...'
@@ -19,7 +23,7 @@ pipeline {
 
     stage('compile') {
       agent {
-        docker:'appuio/shop-example-users-builder'
+        docker 'appuio/shop-example-users-builder'
       }
       steps {
         echo 'Creating release...'
@@ -32,7 +36,7 @@ pipeline {
     }
 
     stage('build') {
-      node {
+      steps {
         echo 'Building a container...'
         unstash 'release'
         sh 'ls -la'
