@@ -42,7 +42,6 @@ pipeline {
       steps {
         echo 'Building a container...'
         unstash 'release'
-        pwd
       }
     } 
   }
