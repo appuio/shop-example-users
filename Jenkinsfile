@@ -11,7 +11,7 @@ pipeline {
       steps {
         echo 'Running tests...'
         sh 'pwd'
-        sh 'maven --version'
+        sh 'mvn --version'
         // install necessary application packages
         // sh 'mix deps.get' 
         // compile the application
@@ -28,7 +28,7 @@ pipeline {
       steps {
         echo 'Creating release...'
         sh 'pwd'
-        sh 'maven --version'
+        sh 'mvn --version'
         // install necessary application packages
         // sh 'mix deps.get'
         // build the application sources
