@@ -33,7 +33,7 @@ pipeline {
         // sh 'mix deps.get'
         // build the application sources
         // sh 'MIX_ENV=prod mix release'
-        stash includes: '_build', name: 'release'
+        // stash includes: '_build', name: 'release'
       }
     }
 
@@ -41,7 +41,7 @@ pipeline {
       agent any
       steps {
         echo 'Building a container...'
-        unstash 'release'
+        // unstash 'release'
       }
     } 
   }
