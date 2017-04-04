@@ -11,6 +11,7 @@ pipeline {
       steps {
         echo 'Running tests...'
         sh 'pwd'
+        sh 'maven --version'
         // install necessary application packages
         // sh 'mix deps.get' 
         // compile the application
