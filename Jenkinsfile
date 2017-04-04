@@ -1,3 +1,31 @@
+pipeline {
+  stages {
+    stage('test') {
+      agent docker:'appuio/shop-example-users-builder'
+      steps {
+        echo 'test...'
+        sh 'mix deps.get'
+      }
+    }
+
+    stage('compile') {
+      agent docker:'appuio/shop-example-users-builder'
+      steps {
+        echo 'compile...'
+        sh 'mix deps.get'
+      }
+    }
+
+    stage('build') {
+      agent none
+      node {
+        echo 'build...'
+      }
+    } 
+  }
+}
+
+/*
 stage('test') {
   node {
     // run the wrapped commands inside our builder container
@@ -21,3 +49,4 @@ stage('build') {
     def image = docker.build 'shop-example-users:latest'
   }
 }
+*/
