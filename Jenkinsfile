@@ -9,11 +9,11 @@ pipeline {
       steps {
         echo 'Running tests...'
         // install necessary application packages
-        sh 'mix deps.get' 
+        bash 'mix deps.get' 
         // compile the application
-        sh 'MIX_ENV=prod mix compile'
+        bash 'MIX_ENV=prod mix compile'
         // run tests
-        sh 'mix test'
+        bash 'mix test'
       }
     }
 
@@ -24,9 +24,9 @@ pipeline {
       steps {
         echo 'Creating release...'
         // install necessary application packages
-        sh 'mix deps.get'
+        bash 'mix deps.get'
         // build the application sources
-        sh 'MIX_ENV=prod mix release'
+        bash 'MIX_ENV=prod mix release'
         stash includes: '_build', name: 'release'
       }
     }
@@ -35,7 +35,7 @@ pipeline {
       steps {
         echo 'Building a container...'
         unstash 'release'
-        sh 'ls -la'
+        bash 'ls -la'
       }
     } 
   }
