@@ -1,25 +1,41 @@
 pipeline {
+  agent none
+  
   stages {
     stage('test') {
-      agent docker:'appuio/shop-example-users-builder'
+      agent {
+        docker:'appuio/shop-example-users-builder'
+      }
       steps {
-        echo 'test...'
-        sh 'mix deps.get'
+        echo 'Running tests...'
+        // install necessary application packages
+        sh 'mix deps.get' 
+        // compile the application
+        sh 'MIX_ENV=prod mix compile'
+        // run tests
+        sh 'mix test'
       }
     }
 
     stage('compile') {
-      agent docker:'appuio/shop-example-users-builder'
+      agent {
+        docker:'appuio/shop-example-users-builder'
+      }
       steps {
-        echo 'compile...'
+        echo 'Creating release...'
+        // install necessary application packages
         sh 'mix deps.get'
+        // build the application sources
+        sh 'MIX_ENV=prod mix release'
+        stash includes: '_build', name: 'release'
       }
     }
 
     stage('build') {
-      agent none
       node {
-        echo 'build...'
+        echo 'Building a container...'
+        unstash 'release'
+        sh 'ls -la'
       }
     } 
   }
