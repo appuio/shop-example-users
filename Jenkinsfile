@@ -4,21 +4,27 @@ pipeline {
   stages {
 
     stage('test') {
-      docker.image('appuio/shop-example-users-builder').inside {
-        echo "testing..."
-        sh "ls -la"
-        sh "pwd"
+      steps {
+        docker.image('appuio/shop-example-users-builder').inside {
+          echo "testing..."
+          sh "ls -la"
+          sh "pwd"
+        }
       }
     }
 
     stage('compile') {
-      docker.image('appuio/shop-example-users-builder').inside {
-        echo "compiling..."
+      steps {
+        docker.image('appuio/shop-example-users-builder').inside {
+          echo "compiling..."
+        }
       }
     }
 
     stage('build') {
-      def image = docker.build 'shop-example-users:latest'
+      steps {
+        def image = docker.build 'shop-example-users:latest'
+      }
     }
     
   }
