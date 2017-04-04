@@ -1,9 +1,5 @@
 pipeline {
-  agent {
-    // add a label such that the same node and workspace
-    // is used for the entire pipeline
-    label 'whatever'
-  }
+  agent none
   
   stages {
     stage('test') {
