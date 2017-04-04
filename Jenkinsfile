@@ -22,12 +22,13 @@ pipeline {
     }
 
     stage('compile') {
-      /* agent {
-        docker 'appuio/shop-example-users-builder'
-      } */
+      agent {
+        label 'maven'
+      }
       steps {
         echo 'Creating release...'
         sh 'pwd'
+        sh 'maven --version'
         // install necessary application packages
         // sh 'mix deps.get'
         // build the application sources
@@ -37,7 +38,7 @@ pipeline {
     }
 
     stage('build') {
-      // agent any
+      agent any
       steps {
         echo 'Building a container...'
         unstash 'release'
