@@ -1,16 +1,15 @@
 pipeline {
   agent none
+  //agent any
   
   stages {
     stage('test') {
-      agent {
+      /*agent {
         docker 'appuio/shop-example-users-builder'
-      }
+      }*/
       steps {
         echo 'Running tests...'
-        script {
-          sh 'pwd'
-        }
+        sh 'pwd'
         // install necessary application packages
         // sh 'mix deps.get' 
         // compile the application
@@ -21,14 +20,12 @@ pipeline {
     }
 
     stage('compile') {
-      agent {
+      /* agent {
         docker 'appuio/shop-example-users-builder'
-      }
+      } */
       steps {
         echo 'Creating release...'
-        script {
-          sh 'pwd'
-        }
+        sh 'pwd'
         // install necessary application packages
         // sh 'mix deps.get'
         // build the application sources
@@ -38,7 +35,7 @@ pipeline {
     }
 
     stage('build') {
-      agent any
+      // agent any
       steps {
         echo 'Building a container...'
         unstash 'release'
