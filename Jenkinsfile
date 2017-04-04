@@ -4,9 +4,10 @@ pipeline {
   
   stages {
     stage('test') {
-      /*agent {
-        docker 'appuio/shop-example-users-builder'
-      }*/
+      agent {
+        label 'maven'
+        // docker 'appuio/shop-example-users-builder'
+      }
       steps {
         echo 'Running tests...'
         sh 'pwd'
