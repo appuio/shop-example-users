@@ -8,7 +8,9 @@ pipeline {
       }
       steps {
         echo 'Running tests...'
-        pwd
+        script {
+          sh 'pwd'
+        }
         // install necessary application packages
         // sh 'mix deps.get' 
         // compile the application
@@ -24,7 +26,9 @@ pipeline {
       }
       steps {
         echo 'Creating release...'
-        pwd
+        script {
+          sh 'pwd'
+        }
         // install necessary application packages
         // sh 'mix deps.get'
         // build the application sources
