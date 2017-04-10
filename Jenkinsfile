@@ -5,13 +5,13 @@ pipeline {
   stages {
     stage('test') {
       agent {
-        label 'maven'
+        label 'python'
         // docker 'appuio/shop-example-users-builder'
       }
       steps {
         echo 'Running tests...'
         sh 'pwd'
-        sh 'mvn --version'
+        sh 'python --version'
         // install necessary application packages
         // sh 'mix deps.get' 
         // compile the application
@@ -23,12 +23,12 @@ pipeline {
 
     stage('compile') {
       agent {
-        label 'maven'
+        label 'python'
       }
       steps {
         echo 'Creating release...'
         sh 'pwd'
-        sh 'mvn --version'
+        sh 'python --version'
         // install necessary application packages
         // sh 'mix deps.get'
         // build the application sources
