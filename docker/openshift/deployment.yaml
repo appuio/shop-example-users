@@ -16,10 +16,9 @@ spec:
       timeoutSeconds: 600
       maxUnavailable: 25%
       maxSurge: 25%
-    resources:
+    resources: {}
   triggers:
-    -
-      type: ImageChange
+    - type: ImageChange
       imageChangeParams:
         containerNames:
           - users-staging
@@ -43,13 +42,29 @@ spec:
         openshift.io/generated-by: OpenShiftNewApp
     spec:
       containers:
-        -
-          name: users-staging
+        - name: users-staging
           image: '172.30.1.1:5000/vshn-demoapp1/users:latest'
           ports:
-            -
-              containerPort: 4000
+            - containerPort: 4000
               protocol: TCP
+          env:
+            - name: DB_HOSTNAME
+              value: users-staging-db
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: users-db
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: users-db
+                  key: password
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: users-db
+                  key: database
           resources:
             limits:
               cpu: 100m
@@ -62,4 +77,6 @@ spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
-      securityContext:
+      securityContext: {}
+status:
+
