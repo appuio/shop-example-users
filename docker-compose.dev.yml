@@ -1,7 +1,8 @@
 version: "2.1"
 services:
   users:
-    build: ../users-builder
+    # build: ../users-builder
+    image: appuio/shop-example-users-builder
     command: /bin/sh -c "mix deps.get;mix ecto.migrate;mix phoenix.server"
     environment:
       DB_USERNAME: users
