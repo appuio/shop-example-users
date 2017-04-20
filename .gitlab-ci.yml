@@ -52,6 +52,7 @@ test:
   services:
     - postgres:9.5
   script:
+    - ping postgres
     # install necessary application packages
     - mix deps.get
     # compile the application
