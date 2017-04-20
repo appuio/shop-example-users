@@ -4,7 +4,7 @@ use Mix.Config
 # you can enable the server option below.
 config :docs_users, DocsUsers.Endpoint,
   http: [port: 4001],
-  server: true
+  server: false
 
 # Print only warnings and errors during test
 config :logger, level: :warn
