@@ -50,6 +50,7 @@ mirror:
 test:
   <<: *builder
   services:
+    # spin up a temporary database for testing
     - postgres:9.5
   script:
     # install necessary application packages
