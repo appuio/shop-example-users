@@ -55,9 +55,9 @@ test:
     # install necessary application packages
     - mix deps.get
     # compile the application
-    - MIX_ENV=dev mix compile
+    - mix compile
     # run tests
-    - MIX_ENV=dev mix test
+    - mix test
   variables:
     POSTGRES_USER: users
     POSTGRES_PASSWORD: secret
@@ -65,6 +65,7 @@ test:
     DB_USERNAME: users
     DB_PASSWORD: secret
     DB_DATABASE: users
+    MIX_ENV: test
   allow_failure: true
 
 compile:
