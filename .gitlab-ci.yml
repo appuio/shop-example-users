@@ -52,13 +52,12 @@ test:
   services:
     - postgres:9.5
   script:
-    - ping postgres
     # install necessary application packages
     - mix deps.get
     # compile the application
-    - MIX_ENV=prod mix compile
+    - MIX_ENV=dev mix compile
     # run tests
-    - mix test
+    - MIX_ENV=dev mix test
   variables:
     POSTGRES_USER: users
     POSTGRES_PASSWORD: secret
