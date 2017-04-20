@@ -67,7 +67,6 @@ test:
     DB_PASSWORD: secret
     DB_DATABASE: users
     MIX_ENV: test
-  allow_failure: true
 
 compile:
   <<: *builder
