@@ -57,7 +57,7 @@ test:
     # compile the application
     - mix compile
     # run tests
-    - mix test test/integration/*
+    - mix test --trace test/integration/*
   variables:
     POSTGRES_USER: users
     POSTGRES_PASSWORD: secret
