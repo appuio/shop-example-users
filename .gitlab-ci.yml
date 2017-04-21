@@ -28,8 +28,8 @@ variables:
     - docker pull $OC_REGISTRY_IMAGE:latest
     - docker build --cache-from $OC_REGISTRY_IMAGE:latest -t $OC_REGISTRY_IMAGE:$DEPLOY_TAG .
     # update the configuration in OpenShift
-    - sed -i 's;webserver-staging;webserver-'"$DEPLOY_ENV"';g' docker/openshift/*
-    - sed -i 's;webserver:latest;webserver:'"$DEPLOY_TAG"';g' docker/openshift/*
+    - sed -i 's;users-staging;users-'"$DEPLOY_ENV"';g' docker/openshift/*
+    - sed -i 's;users:latest;users:'"$DEPLOY_TAG"';g' docker/openshift/*
     - sed -i 's;'$CLUSTER_IP_STAGING';'$CLUSTER_IP';g' docker/openshift/*
     - oc replace -f docker/openshift -R
     # push the image to the internal registry
