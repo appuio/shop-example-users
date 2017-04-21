@@ -35,7 +35,7 @@ variables:
     # push the image to the internal registry
     - docker push $OC_REGISTRY_IMAGE:$DEPLOY_TAG
     # trigger a deployment
-    - oc deploy users-$DEPLOY_ENV --latest --follow
+    - oc rollout latest dc/users-$DEPLOY_ENV
 
 mirror:
   stage: build
