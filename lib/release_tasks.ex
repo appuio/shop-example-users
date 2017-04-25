@@ -21,6 +21,13 @@ defmodule DocsUsers.ReleaseTasks do
     # Run migrations
     run_migrations_for(:docs_users)
 
+    # Run the seed script if it exists
+    seed_script = Path.join([priv_dir(:docs_users), "repo", "seeds.exs"])
+    if File.exists?(seed_script) do
+      IO.puts "Running seed script.."
+      Code.eval_file(seed_script)
+    end
+
     # Signal shutdown
     IO.puts "Success!"
     :init.stop()
