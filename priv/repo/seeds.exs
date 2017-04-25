@@ -9,4 +9,4 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-DocsUsers.Repo.insert! %User{email: "tester@appuio.ch", password: "abcd", active: true}
+DocsUsers.Repo.insert!(%DocsUsers.V1.User{email: "tester@appuio.ch", password: "abcd", active: true})
