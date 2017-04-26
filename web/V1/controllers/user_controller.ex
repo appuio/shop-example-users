@@ -10,7 +10,11 @@ defmodule DocsUsers.V1.UserController do
          true <- Comeonin.Bcrypt.checkpw(password, user.password) do
       
       # generate a JWT
-      new_conn = Guardian.Plug.api_sign_in(conn, user)
+      # encode the given audience claim into the JWT, as it
+      # will be verified in the orders service
+      new_conn = Guardian.Plug.api_sign_in(conn, user, :access, %{
+        aud: "shop-example"
+      })
       jwt = Guardian.Plug.current_token(new_conn)
       {:ok, claims} = Guardian.Plug.claims(new_conn) # TODO: catch failures?
       exp = Map.get(claims, "exp")
