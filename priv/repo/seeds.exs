@@ -9,7 +9,7 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-DocsUsers.Repo.insert!(%DocsUsers.V1.User{
+DocsUsers.Repo.insert(%DocsUsers.V1.User{
   id: 1,
   uuid: "1b206337-bd9f-495b-992b-5386ad14d10f",
   name: "Tester",
